@@ -20,6 +20,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-class Gene:
-    def __init__(self):
+class Fitness:
+    
+    def __init__():
+        pass
+
+class HeijinkFitness(Fitness):
+    
+    def __init__():
         pass

@@ -20,6 +20,19 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-class Population:
-    def __init__(self):
-        pass
+class SimpleGA:
+    def __init__(self, N, ngen, nx, p_mate, p_mut):
+        # population size
+        self.N = N
+
+        # cap on the number of generations to run
+        self.ngen = ngen
+
+        # number of crossover points
+        self.nx = nx
+
+        # probability of mating
+        self.p_mate = p_mate
+
+        # probability of mutation
+        self.p_mut = p_mut

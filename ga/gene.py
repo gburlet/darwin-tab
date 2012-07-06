@@ -20,6 +20,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-class Chromosome:
+class Gene:
+    '''
+    A Gene represents a chord---multiple notes occuring simultaneously.
+    The allele for a gene is up to 6 integers (maximum polyphony of the guitar)
+    each describing the fret position
+    '''
     def __init__(self):
         pass
