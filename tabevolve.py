@@ -23,6 +23,8 @@ THE SOFTWARE.
 import argparse
 
 from ga.simplega import SimpleGA
+from guitar.guitar import Guitar
+from score.score import Score
 
 # set up command line argument structure
 parser = argparse.ArgumentParser(description='Convert a MIDI file to tablature using a genetic algorithm.')
@@ -31,6 +33,8 @@ parser.add_argument('-pmate', '--mateprob', type=float, help='probability the pa
 parser.add_argument('-pmut', '--mutateprob', type=float, help='probability of mutation')
 parser.add_argument('-nx', '--ncross', type=int, help='number of crossover points when mating')
 parser.add_argument('-ngen', '--numgeneration', type=int, help='cap on the number of iterations')
+parser.add_argument('-nf', '--numfrets', type=int, help='number of frets on the guitar')
+parser.add_argument('-t', '--tuning', choices=['standard', 'drop_d'], default='standard', help='tuning of your guitar')
 parser.add_argument('-fin', '--filein', help='input file')
 parser.add_argument('-fout', '--fileout', help='output file')
 parser.add_argument('-v', '--verbose', help='increase output verbosity', action='store_true')
@@ -39,8 +43,17 @@ def main():
     # parse command line arguments
     args = parser.parse_args()
 
+    # instantiate a model of the guitar the user is using
+    guitar = Guitar(args.numfrets, args.tuning)
+
+    # generate the score model
+    score = Score(args.filein)
+
     # start up the genetic algorithm
     ga = SimpleGA(args.popsize, args.numgeneration, args.ncross, args.mateprob, args.mutateprob)
+
+    # create tablature for the guitar with the given parameters
+    ga.evolve(score, guitar)
 
 if __name__ == '__main__':
     main()

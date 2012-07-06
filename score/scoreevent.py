@@ -31,9 +31,9 @@ class ScoreEvent(object):
         # beat duration
         self.dur = kwargs.get('dur')
 
-class Chord(NoteEvent):
+class Chord(ScoreEvent):
 
-    def __init__(self, notes **kwargs):
+    def __init__(self, notes, **kwargs):
         '''
         kwargs is for passing in timing information
         '''
@@ -59,7 +59,7 @@ class Chord(NoteEvent):
     def __str__(self):
         return "<chord: %s>" % ", ".join(self._notes)
 
-class Note(NoteEvent):
+class Note(ScoreEvent):
 
     pitch_classes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 

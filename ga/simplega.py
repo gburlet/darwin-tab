@@ -20,8 +20,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-class SimpleGA(object)
-:
+from population import Population
+
+class SimpleGA(object):
+
     def __init__(self, N, ngen, nx, p_mate, p_mut):
         # population size
         self.N = N
@@ -37,3 +39,15 @@ class SimpleGA(object)
 
         # probability of mutation
         self.p_mut = p_mut
+
+    def evolve(self, score, guitar):
+        '''
+        Begin the genetic algorithm.
+        '''
+
+        for seg in score.segments:
+            # play god and create a new random population
+            pop = Population(N, seg)
+
+            for gen in xrange(self.ngen):
+                pass
