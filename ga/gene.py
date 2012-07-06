@@ -20,11 +20,33 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
+import sys
+sys.path.append('..')
+
+from guitar.guitarevent import Strum, Pluck
+from score.scoreevent import Note, Chord
+from random import choice
+
 class Gene:
     '''
     A Gene represents a chord---multiple notes occuring simultaneously.
     The allele for a gene is up to 6 integers (maximum polyphony of the guitar)
-    each describing the fret position
+    each describing the fret position.
     '''
-    def __init__(self):
-        pass
+
+    def __init__(self, event, guitar):
+        self.guitar = guitar
+
+        self._randomize(event, guitar)
+
+    def _randomize(self, event, guitar):
+        if isinstance(event, Chord):
+            plucks = []
+            for n in event.notes:
+                pluck.append(choice(guitar.get_candidate_frets(n)))
+            self.event = Strum(plucks)
+        elif isinstance(event, Note):
+            self.event = choice(guitar.get_candidate_frets(event))
+
+    def __str__(self):
+        return "<gene %s>" % self.event

@@ -57,7 +57,7 @@ class Strum(GuitarEvent):
     plucks = property(_get_plucks, _set_plucks)
 
     def __str__(self):
-        return "<strum: %s>" % ", ".join(self._plucks)
+        return '<strum: %s>' % ', '.join(self._plucks)
 
 class Pluck(GuitarEvent):
 
@@ -69,3 +69,6 @@ class Pluck(GuitarEvent):
 
     def __eq__(self, other_pluck):
         return self.string == other_pluck.string and self.fret == other_pluck.fret
+
+    def __str__(self):
+        return '<pluck: (string: %d) (fret: %d)>' % (self.string+1, self.fret)

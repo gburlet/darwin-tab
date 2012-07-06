@@ -47,7 +47,7 @@ class SimpleGA(object):
 
         for seg in score.segments:
             # play god and create a new random population
-            pop = Population(N, seg)
+            pop = Population(self.N, seg, guitar)
 
             for gen in xrange(self.ngen):
                 pass

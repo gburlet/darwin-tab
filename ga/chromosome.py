@@ -20,11 +20,23 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
+from gene import Gene
+
 class Chromosome:
     '''
     A chromosome represents a string of genes. In this application, a chromosome
     represents a phrase of tablature, which contains a sequence of genes (chords).
     '''
 
-    def __init__(self):
-        pass
+    def __init__(self, segment, guitar):
+        self.guitar = guitar
+        
+        # initialize with empty sequence of genes
+        self.genes = []
+
+        self._randomize(segment, guitar)
+
+    def _randomize(self, segment, guitar):
+        for event in segment:
+            gene = Gene(event, guitar)
+            self.genes.append(gene)

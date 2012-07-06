@@ -20,13 +20,19 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
+import sys
+sys.path.append('..')
+
+from guitar.guitar import Guitar
+from chromosome import Chromosome
+
 class Population(object):
     '''
     A population is a collection of guitar tablatures (chromosomes)
     corresponding to the input score.
     '''
 
-    def __init__(self, N, segment):
+    def __init__(self, N, segment, guitar):
         '''
         Instantiate a new population
 
@@ -36,3 +42,17 @@ class Population(object):
         '''
 
         self.N = N
+        self.guitar = guitar
+        self.chromosomes = []
+
+        self._randomize(segment, guitar)
+
+    def _randomize(self, segment, guitar):
+        '''
+        Create a new population of possible tablatures for the segment of music
+        of size N.
+        '''
+
+        for i in xrange(self.N):
+            chromo = Chromosome(segment, guitar)
+            self.chromosomes.append(chromo)
