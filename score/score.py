@@ -20,7 +20,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-class Score:
+class Score(object):
 
     def __init__(self, filename):
         '''
@@ -36,7 +36,7 @@ class Score:
 
         self.parseInput(segment=False)
 
-    def parseInput(self, segment=True):
+    def parseInput(self, segment=False):
         '''
         Fill segments of music with notes and chords.
 
@@ -45,4 +45,11 @@ class Score:
         segment {Boolean}: perform auto segmentation to the musical score
         '''
 
-        pass
+class Segment(object):
+    '''
+    A segment of music is a grouping of score events (notes or chords)
+    which are assigned guitar events (plucks or strums)
+    '''
+
+    def __init__(self, score_events):
+        self.events = score_events

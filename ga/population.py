@@ -20,7 +20,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-class Population:
+class Population(object):
     '''
     A population is a collection of guitar tablatures (chromosomes)
     corresponding to the input score.

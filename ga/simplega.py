@@ -20,7 +20,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-class SimpleGA:
+class SimpleGA(object)
+:
     def __init__(self, N, ngen, nx, p_mate, p_mut):
         # population size
         self.N = N

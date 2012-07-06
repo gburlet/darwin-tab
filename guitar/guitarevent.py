@@ -20,7 +20,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-class ScoreEvent(object):
+class GuitarEvent(object):
 
     def __init__(self, **kwargs):
         # optional timing information
@@ -31,55 +31,41 @@ class ScoreEvent(object):
         # beat duration
         self.dur = kwargs.get('dur')
 
-class Chord(NoteEvent):
+class Strum(GuitarEvent):
 
-    def __init__(self, notes **kwargs):
+    def __init__(self, plucks, **kwargs):
         '''
         kwargs is for passing in timing information
         '''
         super(Chords, self).__init__(**kwargs)
 
-        self._set_notes(notes)
+        self._set_plucks(plucks)
 
-    def add_note(self, note):
-        self._notes.append(note)
+    def add_pluck(self, pluck):
+        self.plucks.append(pluck)
 
-    def del_note(self, pname, oct):
-        note = Note(pname, oct)
-        self._notes = filter(lambda n: n != note, self._notes)
+    def del_pluck(self, string, fret):
+        pluck = Pluck(string, fret)
+        self._plucks = filter(lambda n: n != pluck, self.plucks)
 
-    def _get_notes(self):
-        return self._notes
+    def _get_plucks(self):
+        return self._plucks
 
-    def _set_notes(self, notes):
-        self._notes = notes
+    def _set_plucks(self, plucks):
+        self._plucks = plucks
 
-    notes = property(_get_notes, _set_notes)
-
-    def __str__(self):
-        return "<chord: %s>" % ", ".join(self._notes)
-
-class Note(NoteEvent):
-
-    pitch_classes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
-
-    def __init__(self, pname, oct, **kwargs):
-        '''
-        kwargs is for passing in timing information
-        '''
-        super(Note, self).__init__(**kwargs)
-
-        # pitch class
-        if pname.upper() in Note.pitch_classes:
-            self.pname = pname.upper()
-        else:
-            raise ValueError('Invalid pitch name')
-
-        # octave
-        self.oct = oct
-
-    def __eq__(self, other_note):
-        return self.pname == other_note.pname and self.oct == other_note.oct
+    plucks = property(_get_plucks, _set_plucks)
 
     def __str__(self):
-        return "<note: %s%d>" % (self.pname, self.oct)
+        return "<strum: %s>" % ", ".join(self._plucks)
+
+class Pluck(GuitarEvent):
+
+    def __init__(self, string, fret, **kwargs):
+        super(Pluck, self).__init__(**kwargs)
+
+        self.string = string
+        self.fret = fret
+
+    def __eq__(self, other_pluck):
+        return self.string == other_pluck.string and self.fret == other_pluck.fret

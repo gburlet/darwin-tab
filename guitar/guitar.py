@@ -23,9 +23,10 @@ THE SOFTWARE.
 import sys
 sys.path.append('..')
 
-from score.note import Note
+from score.scoreevent import Note
+from guitarevent import Pluck
 
-class Guitar:
+class Guitar(object):
 
     tunings = {
         'standard': [Note('E', 4), Note('B', 3), Note('G', 3), Note('D', 3), Note('A', 2), Note('E', 2)],
@@ -57,7 +58,7 @@ class Guitar:
             pitch_diff = pname_diff + num_chroma*oct_diff
 
             if pitch_diff >= 0 and pitch_diff <= self.num_frets:
-                candidates.append((i, pitch_diff))
+                candidates.append(Pluck(i, pitch_diff))
 
         return candidates
 
