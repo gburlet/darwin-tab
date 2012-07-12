@@ -37,7 +37,7 @@ class Strum(GuitarEvent):
         '''
         kwargs is for passing in timing information
         '''
-        super(Chords, self).__init__(**kwargs)
+        super(Strum, self).__init__(**kwargs)
 
         self._set_plucks(plucks)
 
@@ -57,7 +57,7 @@ class Strum(GuitarEvent):
     plucks = property(_get_plucks, _set_plucks)
 
     def __str__(self):
-        return '<strum: %s>' % ', '.join(self._plucks)
+        return '<strum: %s>' % ', '.join([p.__str__() for p in self._plucks])
 
 class Pluck(GuitarEvent):
 
@@ -71,4 +71,4 @@ class Pluck(GuitarEvent):
         return self.string == other_pluck.string and self.fret == other_pluck.fret
 
     def __str__(self):
-        return '<pluck: (string: %d) (fret: %d)>' % (self.string+1, self.fret)
+        return '<pluck: string: %d, fret: %d>' % (self.string+1, self.fret)

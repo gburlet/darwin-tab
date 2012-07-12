@@ -37,7 +37,7 @@ class Chord(ScoreEvent):
         '''
         kwargs is for passing in timing information
         '''
-        super(Chords, self).__init__(**kwargs)
+        super(Chord, self).__init__(**kwargs)
 
         self._set_notes(notes)
 
