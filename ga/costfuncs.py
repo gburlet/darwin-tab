@@ -48,11 +48,11 @@ def biomechanical_cost(chromo):
 
     # weights
     w_num_frets_depressed = 1.0  
-    w_fret_distance_between = 5.0  
-    w_fret_distance_context = 1.0
-    w_fret_distance_within = 1.0
-    w_fret_distance_largest = 2.5
-    w_cognitive_penalty = 1.0
+    w_fret_distance_between = 2.0  
+    w_fret_distance_context = 4.0
+    w_fret_distance_within = 2.0
+    w_fret_distance_largest = 2.0
+    w_cognitive_penalty = 2.0
     w_intuitive_penalty = 1.5
 
     for i in xrange(len(chromo.genes)):
@@ -113,7 +113,7 @@ def biomechanical_cost(chromo):
                         strum_distance = sum(map(lambda f: abs(f - strum_fret_avg), cur_frets_depressed))
 
                         # slight penalty to notes played high on the fretboard
-                        if strum_fret_avg > 10:
+                        if strum_fret_avg > 8:
                             cognitive_penalty += 10
 
                         if strum is prev_strum:
