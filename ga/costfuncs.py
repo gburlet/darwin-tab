@@ -33,6 +33,25 @@ def biomechanical_cost(chromo):
     difficulty of hand movement.
     From tuohy2009 - Guitar Tablature Creation with Neural Networks
                      and Distributed Genetic Search
+
+    (+ cost)
+    Fret Distances
+    --------------
+    1. number of frets depressed
+    2. total fretwise distance between sequential chords + penalty for large distance
+    3. total fretwise distance between each chord and average of 6 surrounding notes + penalty for large distance
+    4. total fretwise distance within chords
+    5. total largest fretwise distance between any two notes of sequential chords
+
+    Intuitive Penalties
+    -------------------
+    1. Higher note played on lower string
+    2. Lower note played on higher string
+    3. Slightly penalize open pluck followed by fretted pluck on higher frets
+
+    Cognitive Penalties
+    -------------------
+    1. Slight penalty to notes played higher on fretboard
     '''
     
     # factors which inhibit cost
@@ -94,10 +113,10 @@ def biomechanical_cost(chromo):
                     context_frets_depressed['sum'] += sum(strum_frets_depressed)
                     context_frets_depressed['len'] += len(strum_frets_depressed)
 
-                    if strum is prev_strum and len(strum) == 1 and len(cur_strum) == 1:
+                    if strum is prev_strum and len(strum) == 1 and len(cur_strum) == 1 and cur_strum[0].fret > 5:
                         # penalize an open pluck followed by a fretted pluck
                         if prev_strum[0].fret == 0 and cur_strum[0].fret != 0:
-                            intuitive_penalty += 10
+                            intuitive_penalty += 5
 
                         # check if higher note is played on a lower string
                         # or lower note is played on a higher string
