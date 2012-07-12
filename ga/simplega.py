@@ -24,8 +24,11 @@ from population import Population
 
 class SimpleGA(object):
 
-    def __init__(self, N, ngen, nx, p_mate, p_mut):
-        # population size
+    def __init__(self, N, ngen, nx, p_mate, p_mut, verbose):
+        # population size, make it so there is an even number of parents to mate
+        if N % 2 == 1:
+            N += 1
+
         self.N = N
 
         # cap on the number of generations to run
@@ -40,6 +43,8 @@ class SimpleGA(object):
         # probability of mutation
         self.p_mut = p_mut
 
+        self.verbose = verbose
+
     def evolve(self, score, guitar):
         '''
         Begin the genetic algorithm.
@@ -50,4 +55,10 @@ class SimpleGA(object):
             pop = Population(self.N, seg, guitar)
 
             for gen in xrange(self.ngen):
-                pass
+                pop.next_generation(self.nx, self.p_mate, self.p_mut)
+
+                if self.verbose:
+                    print "generation %d; fitness: %f" % (gen + 1, pop.calc_fitness())
+
+            # get the elite tab
+            print pop.get_elite()

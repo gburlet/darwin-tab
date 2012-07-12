@@ -21,6 +21,7 @@ THE SOFTWARE.
 '''
 
 from gene import Gene
+from costfuncs import *
 
 class Chromosome:
     '''
@@ -34,9 +35,19 @@ class Chromosome:
         # initialize with empty sequence of genes
         self.genes = []
 
+        # fitness of the chromosome
+        self.fitness = 0
+
         self._randomize(segment, guitar)
 
     def _randomize(self, segment, guitar):
         for event in segment:
             gene = Gene(event, guitar)
             self.genes.append(gene)
+
+    def calc_fitness(self):
+        cost = biomechanical_cost(self)
+        self.fitness = 1.0/(cost + 1.0)
+
+    def __str__(self):
+        return "\n".join(map(lambda g: g.__str__(), self.genes))

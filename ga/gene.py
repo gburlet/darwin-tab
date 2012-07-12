@@ -30,23 +30,45 @@ from random import choice
 class Gene:
     '''
     A Gene represents a chord---multiple notes occuring simultaneously.
-    The allele for a gene is up to 6 integers (maximum polyphony of the guitar)
-    each describing the fret position.
+    The allele for a gene is one strum (up to 6 plucks - maximum polyphony of the guitar)
+    each describing the fret position and string to pluck.
     '''
 
-    def __init__(self, event, guitar):
+    def __init__(self, score_event, guitar):
         self.guitar = guitar
+        self.score_event = score_event
+        self.guitar_event = None
 
-        self._randomize(event, guitar)
+        self._randomize()
 
-    def _randomize(self, event, guitar):
-        if isinstance(event, Chord):
+    def _randomize(self, diff_alleles=False):
+        '''
+        Select random plucks on the guitar model that would
+        produce the given pitches in the score event.
+
+        PARAMETERS:
+            diff_alleles {boolean}: if the alleles have already been chosen
+                                    for the gene, make sure they are different.
+        '''
+
+        if isinstance(self.score_event, Chord):
             plucks = []
-            for n in event.notes:
-                pluck.append(choice(guitar.get_candidate_frets(n)))
-            self.event = Strum(plucks)
-        elif isinstance(event, Note):
-            self.event = choice(guitar.get_candidate_frets(event))
+            for i, n in enumerate(self.score_event.notes):
+                candidates = self.guitar.get_candidate_frets(n)
+                if self.guitar_event is not None and diff_alleles:
+                    # ensure alleles are different
+                    candidates = filter(lambda p: p != self.guitar_event.plucks[i], candidates)
+                plucks.append(choice(candidates))
+            self.guitar_event = Strum(plucks)
+        elif isinstance(self.score_event, Note):
+            candidates = self.guitar.get_candidate_frets(self.score_event)
+            if self.guitar_event is not None and diff_alleles:
+                # ensure alleles are different
+                candidates = filter(lambda p: p != self.guitar_event, candidates)
+            self.guitar_event = choice(candidates)
+
+    def mutate(self):
+        self._randomize(diff_alleles=True)
 
     def __str__(self):
-        return "<gene %s>" % self.event
+        return "<gene %s>" % self.guitar_event
