@@ -20,7 +20,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from scoreevent import Note
+from scoreevent import Note, Chord
 
 class Score(object):
 
@@ -38,14 +38,10 @@ class Score(object):
 
         #self.parseInput(segment=False)
 
-        # for now, fill the score with fake data
-        # C Major scale
-        oct = 3
-        pnames = ['C','D','E','F','G','A','B']
-        notes = []
-        for pname in pnames:
-            notes.append(Note(pname,oct))
-        notes.append(Note('C',oct+1))
+        # for now, fill the score with hardcoded data
+        # stairway to heaven intro
+        notes = [Note('A',3), Note('C',4), Note('E',4), Note('A',4), Chord([Note('B',4), Note('G#',3)]), Note('E',4), Note('C',4), Note('B',4), Chord([Note('C',5), Note('G',3)]), Note('E',4), Note('C',4), Note('C',5), Chord([Note('F#',4), Note('F#',3)]), Note('D',4), Note('A',3), Note('F#',4)]
+
         self.segments.append(notes)
 
     def parseInput(self, segment=False):
