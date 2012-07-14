@@ -20,36 +20,60 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
+from pymei import MeiDocument, MeiElement, XmlImport
 from scoreevent import Note, Chord
 
 class Score(object):
 
-    def __init__(self, filename):
+    def __init__(self, input_path):
         '''
         Initialize a score. Fill the score with notes
         parsed from the provided file
         '''
 
         # input filename
-        self.filename = filename
+        self.input_path = input_path
 
         # segments of music
         self.segments = []
 
-        #self.parseInput(segment=False)
+        self.parseInput(segment=True)
 
-        # for now, fill the score with hardcoded data
-        # stairway to heaven intro
-        notes = [Note('A',3), Note('C',4), Note('E',4), Note('A',4), Chord([Note('B',4), Note('G#',3)]), Note('E',4), Note('C',4), Note('B',4), Chord([Note('C',5), Note('G',3)]), Note('E',4), Note('C',4), Note('C',5), Chord([Note('F#',4), Note('F#',3)]), Note('D',4), Note('A',3), Note('F#',4)]
-
-        self.segments.append(notes)
-
-    def parseInput(self, segment=False):
+    def parseInput(self, segment=True):
         '''
         Fill segments of music with notes and chords.
 
         PARAMETERS
         ----------
-        segment {Boolean}: perform auto segmentation to the musical score
+        segment {Boolean}: segment the musical score on mei section elements
         '''
-        pass
+        
+        # read in the Mei document
+        meidoc = XmlImport.read(self.input_path)
+        mei = meidoc.getRootElement()
+
+        sections = mei.getDescendantsByName('section')
+        for s in sections:
+            segment = []
+            # get measures in section
+            measures = s.getChildrenByName('measure')
+            for m in measures:
+                # only parse first staff (instrument), the instrument to convert to tablature
+                staff = m.getChildrenByName('staff')[0]
+                # only parse first layer (assume only one voice)
+                layer = staff.getChildrenByName('layer')[0]
+                score_events = layer.getChildren()
+                for e in score_events:
+                    if e.getName() == 'chord':
+                        notes_in_chord = [Note(n.getAttribute('pname').value, int(n.getAttribute('oct').value)) for n in e.getChildrenByName('note')]
+                        chord = Chord(notes_in_chord)
+                        segment.append(chord)
+                    elif e.getName() == 'note':
+                        note = Note(e.getAttribute('pname').value, int(e.getAttribute('oct').value))
+                        segment.append(note)
+
+            self.segments.append(segment)
+
+                            
+
+                

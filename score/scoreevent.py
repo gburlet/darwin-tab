@@ -33,10 +33,15 @@ class ScoreEvent(object):
 
 class Chord(ScoreEvent):
 
-    def __init__(self, notes, **kwargs):
+    def __init__(self, notes=[], **kwargs):
         '''
-        kwargs is for passing in timing information
+        Creates a chord
+
+        PARAMETERS
+        ----------
+        kwargs: {beat_start (int), dur (int)}
         '''
+
         super(Chord, self).__init__(**kwargs)
 
         self._set_notes(notes)
