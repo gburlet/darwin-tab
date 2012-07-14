@@ -43,6 +43,9 @@ class SimpleGA(object):
         # probability of mutation
         self.p_mut = p_mut
 
+        # container for elite individuals from populations
+        self.elite = []
+
         self.verbose = verbose
 
     def evolve(self, score, guitar):
@@ -61,4 +64,9 @@ class SimpleGA(object):
                     print "generation %d; fitness: %f" % (gen + 1, pop.calc_fitness())
 
             # get the elite tab
-            print pop.get_elite()
+            self.elite.append(pop.get_elite())
+
+        return self.elite
+
+    def save_elite(self, input_path, output_path):
+        pass

@@ -39,6 +39,7 @@ class Chord(ScoreEvent):
 
         PARAMETERS
         ----------
+        notes {list}: optional list of notes to put in the chord container
         kwargs: {beat_start (int), dur (int)}
         '''
 
@@ -68,8 +69,11 @@ class Note(ScoreEvent):
 
     pitch_classes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 
-    def __init__(self, pname, oct, **kwargs):
+    def __init__(self, id, pname, oct, **kwargs):
         '''
+        id {String}: id of the mei element this note originates from
+        pname {String}: pitch name
+        oct {Integer}: octave
         kwargs is for passing in timing information
         '''
         super(Note, self).__init__(**kwargs)
@@ -82,6 +86,8 @@ class Note(ScoreEvent):
 
         # octave
         self.oct = oct
+
+        self.id = id
 
     def __eq__(self, other_note):
         return self.pname == other_note.pname and self.oct == other_note.oct

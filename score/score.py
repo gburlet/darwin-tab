@@ -65,11 +65,12 @@ class Score(object):
                 score_events = layer.getChildren()
                 for e in score_events:
                     if e.getName() == 'chord':
-                        notes_in_chord = [Note(n.getAttribute('pname').value, int(n.getAttribute('oct').value)) for n in e.getChildrenByName('note')]
+                        notes_in_chord = [Note(n.getId(), n.getAttribute('pname').value, int(n.getAttribute('oct').value)) 
+                                         for n in e.getChildrenByName('note')]
                         chord = Chord(notes_in_chord)
                         segment.append(chord)
                     elif e.getName() == 'note':
-                        note = Note(e.getAttribute('pname').value, int(e.getAttribute('oct').value))
+                        note = Note(e.getId(), e.getAttribute('pname').value, int(e.getAttribute('oct').value))
                         segment.append(note)
 
             self.segments.append(segment)

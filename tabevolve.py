@@ -60,7 +60,7 @@ def main():
     ga = SimpleGA(args.popsize, args.numgeneration, args.ncross, args.mateprob, args.mutateprob, args.verbose)
 
     # create tablature for the guitar with the given parameters
-    ga.evolve(score, guitar)
+    elite = ga.evolve(score, guitar)
 
 if __name__ == '__main__':
     main()
