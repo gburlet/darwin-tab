@@ -21,6 +21,7 @@ THE SOFTWARE.
 '''
 
 import argparse
+import os
 
 from ga.simplega import SimpleGA
 from guitar.guitar import Guitar
@@ -46,9 +47,15 @@ def main():
     # instantiate a model of the guitar the user is using
     guitar = Guitar(args.numfrets, args.tuning)
 
+    if not os.path.exists(args.filein):
+        raise ValueError('The input file does not exist')
+    _, input_ext = os.path.splitext(args.filein)
+    if input_ext != '.mei':
+        raise ValueError('The input file must be in mei file format')
+
     # generate the score model
     score = Score(args.filein)
-
+    
     # start up the genetic algorithm
     ga = SimpleGA(args.popsize, args.numgeneration, args.ncross, args.mateprob, args.mutateprob, args.verbose)
 
