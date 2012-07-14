@@ -28,7 +28,7 @@ from guitar.guitar import Guitar
 from score.score import Score
 
 # set up command line argument structure
-parser = argparse.ArgumentParser(description='Convert a MIDI file to tablature using a genetic algorithm.')
+parser = argparse.ArgumentParser(description='Convert a Mei file to tablature using a genetic algorithm.')
 parser.add_argument('-p', '--popsize', type=int, help='population size')
 parser.add_argument('-pmate', '--mateprob', type=float, help='probability the parents will mate')
 parser.add_argument('-pmut', '--mutateprob', type=float, help='probability of mutation')

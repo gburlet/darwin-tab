@@ -103,7 +103,7 @@ class SimpleGA(object):
         # add the tablature data to the original mei document
         for p in plucks:
             note = score.meidoc.getElementById(p[0])
-            note.addAttribute('tab.string', str(p[1].string))
+            note.addAttribute('tab.string', str(p[1].string+1))
             note.addAttribute('tab.fret', str(p[1].fret))
 
         # write the modified document to disk
