@@ -69,9 +69,10 @@ class Note(ScoreEvent):
 
     pitch_classes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 
-    def __init__(self, id, pname, oct, **kwargs):
+    def __init__(self, pname, oct, id=None, **kwargs):
         '''
         id {String}: id of the mei element this note originates from
+            default is None (may or may not be tied to an MeiElement)
         pname {String}: pitch name
         oct {Integer}: octave
         kwargs is for passing in timing information

@@ -49,8 +49,8 @@ class Score(object):
         '''
         
         # read in the Mei document
-        meidoc = XmlImport.read(self.input_path)
-        mei = meidoc.getRootElement()
+        self.meidoc = XmlImport.read(self.input_path)
+        mei = self.meidoc.getRootElement()
 
         sections = mei.getDescendantsByName('section')
         for s in sections:
@@ -65,12 +65,12 @@ class Score(object):
                 score_events = layer.getChildren()
                 for e in score_events:
                     if e.getName() == 'chord':
-                        notes_in_chord = [Note(n.getId(), n.getAttribute('pname').value, int(n.getAttribute('oct').value)) 
+                        notes_in_chord = [Note(n.getAttribute('pname').value, int(n.getAttribute('oct').value), n.getId()) 
                                          for n in e.getChildrenByName('note')]
                         chord = Chord(notes_in_chord)
                         segment.append(chord)
                     elif e.getName() == 'note':
-                        note = Note(e.getId(), e.getAttribute('pname').value, int(e.getAttribute('oct').value))
+                        note = Note(e.getAttribute('pname').value, int(e.getAttribute('oct').value), e.getId())
                         segment.append(note)
 
             self.segments.append(segment)

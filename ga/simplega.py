@@ -21,6 +21,13 @@ THE SOFTWARE.
 '''
 
 from population import Population
+import sys
+sys.path.append('..')
+
+from guitar.guitarevent import Strum, Pluck
+from score.scoreevent import Note, Chord
+from pymei import XmlExport
+
 
 class SimpleGA(object):
 
@@ -44,7 +51,7 @@ class SimpleGA(object):
         self.p_mut = p_mut
 
         # container for elite individuals from populations
-        self.elite = []
+        self.elites = []
 
         self.verbose = verbose
 
@@ -64,9 +71,40 @@ class SimpleGA(object):
                     print "generation %d; fitness: %f" % (gen + 1, pop.calc_fitness())
 
             # get the elite tab
-            self.elite.append(pop.get_elite())
+            self.elites.append(pop.get_elite())
+            print self.elites[-1]
 
-        return self.elite
+        return self.elites
 
-    def save_elite(self, input_path, output_path):
-        pass
+    def save_elite(self, score, output_path):
+        '''
+        Save the elite tablature to the specified output path.
+        At this point, the output file should be a copy on the HDD
+        of the original input file, to preserve meta-data and other 
+        contents of the file not maintained in the internal representation
+        of the musical document.
+
+        PARAMETERS
+        ----------
+        output_path {String}: the output path of the mei file
+        '''
+
+        # get list of tablature data to append to note elements
+        # plucks is a list of tuples (MeiElement.id, Pluck)
+        plucks = []
+        for chromo in self.elites:
+            for g in chromo.genes:
+                if isinstance(g.guitar_event, Pluck):
+                    plucks.append((g.score_event.id, g.guitar_event))
+                elif isinstance(g.guitar_event, Strum):
+                    for p, n in zip(g.guitar_event.plucks, g.score_event.notes):
+                        plucks.append((n.id, p))       
+        
+        # add the tablature data to the original mei document
+        for p in plucks:
+            note = score.meidoc.getElementById(p[0])
+            note.addAttribute('tab.string', str(p[1].string))
+            note.addAttribute('tab.fret', str(p[1].fret))
+
+        # write the modified document to disk
+        XmlExport.meiDocumentToFile(score.meidoc, output_path)
