@@ -21,11 +21,9 @@ THE SOFTWARE.
 '''
 
 from population import Population
-import sys
-sys.path.append('..')
 
-from guitar.guitarevent import Strum, Pluck
-from score.scoreevent import Note, Chord
+from darwintab.guitar.guitarevent import Strum, Pluck
+from darwintab.score.scoreevent import Note, Chord
 from pymei import XmlExport
 
 

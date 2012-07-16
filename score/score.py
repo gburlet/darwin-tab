@@ -52,6 +52,7 @@ class Score(object):
         self.meidoc = XmlImport.read(self.input_path)
         mei = self.meidoc.getRootElement()
 
+        pitch_names = ['C', 'D', 'E', 'F', 'G', 'A', 'B']
         sections = mei.getDescendantsByName('section')
         for s in sections:
             segment = []
@@ -65,16 +66,35 @@ class Score(object):
                 score_events = layer.getChildren()
                 for e in score_events:
                     if e.getName() == 'chord':
-                        notes_in_chord = [Note(n.getAttribute('pname').value, int(n.getAttribute('oct').value), n.getId()) 
-                                         for n in e.getChildrenByName('note')]
+                        notes_in_chord = []
+                        for n in e.getChildrenByName('note'):
+                            note = self._handle_mei_note(n)    
+                            notes_in_chord.append(note)
                         chord = Chord(notes_in_chord)
                         segment.append(chord)
                     elif e.getName() == 'note':
-                        note = Note(e.getAttribute('pname').value, int(e.getAttribute('oct').value), e.getId())
+                        note = self._handle_mei_note(e)
                         segment.append(note)
 
             self.segments.append(segment)
 
-                            
+    def _handle_mei_note(self, note):
+        '''
+        Helper function that takes an mei note element
+        and creates a Note object out of it.
+        '''
+        
+        pname = note.getAttribute('pname').value
+        # append accidental to pname for internal model
+        if note.hasAttribute('accid.ges'):
+            accid = note.getAttribute('accid.ges').value
+            if accid == 'f':
+                # convert to sharp
+                pname = pitch_names[pitch_names.index(pname)-1 % len(pitch_names)] + '#'
+            if accid == 's':
+                pname += '#'
+        oct = int(note.getAttribute('oct').value)
+        id = note.getId()
 
-                
+        return Note(pname, oct, id)
+

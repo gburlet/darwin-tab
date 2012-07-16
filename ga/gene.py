@@ -20,11 +20,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-import sys
-sys.path.append('..')
-
-from guitar.guitarevent import Strum, Pluck
-from score.scoreevent import Note, Chord
+from darwintab.guitar.guitarevent import Strum, Pluck
+from darwintab.score.scoreevent import Note, Chord
 from random import choice
 
 class Gene:

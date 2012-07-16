@@ -21,10 +21,8 @@ THE SOFTWARE.
 '''
 
 from __future__ import division
-import sys
-sys.path.append('..')
 
-from guitar.guitarevent import Strum, Pluck
+from darwintab.guitar.guitarevent import Strum, Pluck
 
 def biomechanical_cost(chromo):
     '''

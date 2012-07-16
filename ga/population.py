@@ -21,13 +21,11 @@ THE SOFTWARE.
 '''
 
 from __future__ import division
-import sys
-sys.path.append('..')
 import random as rnd
 import copy
 from operator import attrgetter
 
-from guitar.guitar import Guitar
+from darwintab.guitar.guitar import Guitar
 from chromosome import Chromosome
 from utilities import WeightedRandomGenerator
 

@@ -20,10 +20,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-import sys
-sys.path.append('..')
-
-from score.scoreevent import Note
+from darwintab.score.scoreevent import Note
 from guitarevent import Pluck
 
 class Guitar(object):
