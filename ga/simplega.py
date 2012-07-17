@@ -74,10 +74,11 @@ class SimpleGA(object):
 
         return self.elites
 
-    def save_elite(self, score, output_path):
+    def save_elite(self, score, output_path=None):
         '''
-        Save the elite tablature to the specified output path.
-        At this point, the output file should be a copy on the HDD
+        Save the elite tablature to the specified output path, or return 
+        a string representation of the MeiDocument.
+        The output file should be a copy on the HDD
         of the original input file, to preserve meta-data and other 
         contents of the file not maintained in the internal representation
         of the musical document.
@@ -104,5 +105,10 @@ class SimpleGA(object):
             note.addAttribute('tab.string', str(p[1].string+1))
             note.addAttribute('tab.fret', str(p[1].fret))
 
-        # write the modified document to disk
-        XmlExport.meiDocumentToFile(score.meidoc, output_path)
+        if output_path is not None:
+            # write the modified document to disk
+            XmlExport.meiDocumentToFile(score.meidoc, output_path)
+        else:
+            # return a string of the MeiDocument
+            return XmlExport.meiDocumentToText(score.meidoc)
+            
