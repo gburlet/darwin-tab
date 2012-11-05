@@ -30,13 +30,27 @@ class Guitar(object):
         'drop_d': [Note('E', 4), Note('B', 3), Note('G', 3), Note('D', 3), Note('A', 2), Note('D', 2)]
     }
 
-    def __init__(self, num_frets=22, tuning='standard'):
+    def __init__(self, num_frets=24, tuning='standard', capo=0):
         self.num_frets = num_frets 
         if tuning in Guitar.tunings:
             self.tuning = tuning
             self.strings = Guitar.tunings[self.tuning]
         else:
             raise ValueError('Invalid tuning')
+
+        self.capo = capo
+
+    def get_pitch_range(self):
+        '''
+        Calculate the pitch range of the guitar model using the number of frets,
+        the tuning of the guitar, and the capo position.
+        Returns a tuple of Note objects (lowerpitch, upperpitch)
+        '''
+
+        lb_pitch = self.strings[-1] + self.capo
+        ub_pitch = self.strings[0] + self.num_frets
+
+        return (lb_pitch, ub_pitch)
 
     def get_candidate_frets(self, note):
         '''
@@ -82,4 +96,7 @@ class Guitar(object):
         return Note(pname, oct)
 
     def __str__(self):
-        return "<Guitar: %d frets, %s tuning>" % (self.num_frets, self.tuning)
+        return "<Guitar: %d frets, %s tuning, capo on fret %d>" % (self.num_frets, self.tuning, self.capo)
+
+    def __repr__(self):
+        return self.__str__()
