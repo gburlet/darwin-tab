@@ -20,6 +20,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
+from __future__ import division
+
 class ScoreEvent(object):
 
     def __init__(self, **kwargs):
@@ -90,6 +92,42 @@ class Note(ScoreEvent):
 
         self.id = id
 
+    def __add__(self, step):
+        '''
+        Add an integer number of semitones to the note
+        '''
+
+        num_chroma = len(Note.pitch_classes)
+        step_up = True
+        if step < 0:
+            step_up = False
+
+        note = Note(self.pname, self.oct)
+        p_ind = Note.pitch_classes.index(self.pname)
+        new_p_ind = (p_ind + step) % num_chroma
+
+        note.pname = Note.pitch_classes[new_p_ind]
+        oct_diff = int(step / 12)
+
+        note.oct = self.oct + oct_diff
+
+        if oct_diff == 0:
+            if step_up:
+                if new_p_ind >= 0 and new_p_ind < p_ind:
+                    note.oct += 1
+            else:
+                if new_p_ind > p_ind and new_p_ind < num_chroma:
+                    note.oct -= 1
+
+        return note
+
+    def __sub__(self, step):
+        '''
+        Subtract an integer number of semitones to the note
+        '''
+
+        return self.__add__(-step)
+
     def __eq__(self, other_note):
         return self.pname == other_note.pname and self.oct == other_note.oct
 
@@ -101,3 +139,6 @@ class Note(ScoreEvent):
 
     def __str__(self):
         return "<note: %s%d>" % (self.pname, self.oct)
+
+    def __repr__(self):
+        return self.__str__()
