@@ -62,7 +62,10 @@ class Guitar(object):
         candidates = []
         num_chroma = len(Note.pitch_classes)
 
-        for i, s in enumerate(self.strings):
+        # get open string pitches with capo position
+        open_strings = [n + self.capo for n in self.strings]
+
+        for i, s in enumerate(open_strings):
             # calculate pitch difference from the open string note
             oct_diff = note.oct - s.oct
             pname_diff = Note.pitch_classes.index(note.pname) - Note.pitch_classes.index(s.pname)
