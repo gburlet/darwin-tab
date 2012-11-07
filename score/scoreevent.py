@@ -92,6 +92,22 @@ class Note(ScoreEvent):
 
         self.id = id
 
+    def toMidi(self):
+        '''
+        Convert the pitch name and octave to a MIDI note number
+        between 0 and 127
+        '''
+
+        p_ind = Note.pitch_classes.index(self.pname)
+        num_chroma = len(Note.pitch_classes)
+
+        midi = (self.oct-1)*num_chroma + 24 + p_ind
+        
+        if midi >= 0 and midi <= 127:
+            return midi
+        else:
+            return None
+
     def __add__(self, step):
         '''
         Add an integer number of semitones to the note
