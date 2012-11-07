@@ -150,8 +150,14 @@ class Note(ScoreEvent):
     def __lt__(self, other_note):
         return self.oct < other_note.oct or (self.oct == other_note.oct and Note.pitch_classes.index(self.pname) < Note.pitch_classes.index(other_note.pname))
 
+    def __le__(self, other_note):
+        return self.__lt__(other_note) or self.__eq__(other_note)
+
     def __gt__(self, other_note):
         return self.oct > other_note.oct or (self.oct == other_note.oct and Note.pitch_classes.index(self.pname) > Note.pitch_classes.index(other_note.pname))
+
+    def __ge__(self, other_note):
+        return self.__gt__(other_note) or self.__eq__(other_note)
 
     def __str__(self):
         return "<note: %s%d>" % (self.pname, self.oct)
