@@ -50,7 +50,7 @@ class Guitar(object):
         lb_pitch = self.strings[-1] + self.capo
         ub_pitch = self.strings[0] + self.num_frets
 
-        return (lb_pitch, ub_pitch)
+        return lb_pitch, ub_pitch
 
     def get_candidate_frets(self, note):
         '''
