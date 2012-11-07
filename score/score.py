@@ -25,21 +25,31 @@ from scoreevent import Note, Chord
 
 class Score(object):
 
-    def __init__(self, input_path):
+    def __init__(self):
         '''
-        Initialize a score. Fill the score with notes
-        parsed from the provided file
+        Initialize a score 
         '''
-
-        # input filename
-        self.input_path = input_path
 
         # segments of music
         self.segments = []
 
-        self.parseInput(segment=True)
+    def parse_mei_str(self, mei_str, segment=True):
+        '''
+        Read an mei file from string and fill the score model
+        '''
 
-    def parseInput(self, segment=True):
+        self.meidoc = XmlImport.documentFromText(mei_str)
+        self.parse_input(segment)
+
+    def parse_mei_file(self, mei_path, segment=True):
+        '''
+        Read an mei file and fill the score model
+        '''
+
+        self.meidoc = XmlImport.documentFromFile(str(mei_path))
+        self.parse_input(segment)
+
+    def parse_input(self, segment=True):
         '''
         Fill segments of music with notes and chords.
 
@@ -49,7 +59,6 @@ class Score(object):
         '''
         
         # read in the Mei document
-        self.meidoc = XmlImport.read(self.input_path)
         mei = self.meidoc.getRootElement()
 
         pitch_names = ['C', 'D', 'E', 'F', 'G', 'A', 'B']

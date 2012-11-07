@@ -54,7 +54,8 @@ def main():
         raise ValueError('The input file must be in mei file format')
 
     # generate the score model
-    score = Score(args.filein)
+    score = Score()
+    score.parse_mei_file(args.filein)
     
     # start up the genetic algorithm
     ga = SimpleGA(args.popsize, args.numgeneration, args.ncross, args.mateprob, args.mutateprob, args.verbose)
