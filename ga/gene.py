@@ -55,6 +55,9 @@ class Gene:
                 if self.guitar_event is not None and diff_alleles:
                     # ensure alleles are different
                     candidates = filter(lambda p: p != self.guitar_event.plucks[i], candidates)
+                # ensure plucks are not on the same string
+                chord_strings = [p.string for p in plucks]
+                candidates = filter(lambda p: p.string not in chord_strings, candidates)
                 plucks.append(choice(candidates))
             self.guitar_event = Strum(plucks)
         elif isinstance(self.score_event, Note):
