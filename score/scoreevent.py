@@ -65,7 +65,7 @@ class Chord(ScoreEvent):
     notes = property(_get_notes, _set_notes)
 
     def __str__(self):
-        return "<chord: %s>" % ", ".join(self._notes)
+        return "<chord: %s>" % ", ".join([n.__str__() for n in self._notes])
 
 class Note(ScoreEvent):
 

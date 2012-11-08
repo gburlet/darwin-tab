@@ -23,9 +23,10 @@ THE SOFTWARE.
 import argparse
 import os
 
-from ga.simplega import SimpleGA
-from guitar.guitar import Guitar
-from score.score import Score
+from darwintab.ga.simplega import SimpleGA
+from darwintab.guitar.guitar import Guitar
+from darwintab.score.score import Score
+import time
 
 # set up command line argument structure
 parser = argparse.ArgumentParser(description='Convert a Mei file to tablature using a genetic algorithm.')
@@ -36,16 +37,27 @@ parser.add_argument('-nx', '--ncross', type=int, help='number of crossover point
 parser.add_argument('-ngen', '--numgeneration', type=int, help='cap on the number of iterations')
 parser.add_argument('-nf', '--numfrets', type=int, help='number of frets on the guitar')
 parser.add_argument('-t', '--tuning', choices=['standard', 'drop_d'], default='standard', help='tuning of your guitar')
-parser.add_argument('-fin', '--filein', help='input file')
-parser.add_argument('-fout', '--fileout', help='output file')
+parser.add_argument('-c', '--capo', type=int, help='capo fret number')
+parser.add_argument('filein', help='input file')
+parser.add_argument('fileout', help='output file')
 parser.add_argument('-v', '--verbose', help='increase output verbosity', action='store_true')
 
-def main():
+def print_timing(func):
+    def wrapper(*arg):
+        t1 = time.time()
+        res = func(*arg)
+        t2 = time.time()
+        print '%s took %0.2f s' % (func.func_name, (t2-t1))
+        return res
+    return wrapper
+
+@print_timing
+def arrange_tab():
     # parse command line arguments
     args = parser.parse_args()
 
     # instantiate a model of the guitar the user is using
-    guitar = Guitar(args.numfrets, args.tuning)
+    guitar = Guitar(args.numfrets, args.tuning, args.capo)
 
     if not os.path.exists(args.filein):
         raise ValueError('The input file does not exist')
@@ -67,4 +79,4 @@ def main():
     ga.save_elite(score, args.fileout)
 
 if __name__ == '__main__':
-    main()
+    arrange_tab()

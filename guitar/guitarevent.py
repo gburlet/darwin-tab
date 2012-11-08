@@ -56,8 +56,39 @@ class Strum(GuitarEvent):
 
     plucks = property(_get_plucks, _set_plucks)
 
+    def distance(self, other):
+        '''
+        Get the distance between this strum and another pluck or strum
+        '''
+
+        if isinstance(other, Strum):
+            max_fret = max([p.fret for p in self.plucks])
+            other_max_fret = max([p.fret for p in other.plucks])
+            if max_fret == 0 or other_max_fret == 0:
+                distance = 0
+            else:
+                distance = max_fret - other_max_fret
+        elif isinstance(other, Pluck):
+            frets = [p.fret for p in self.plucks]
+            min_fret = min(frets)
+            max_fret = max(frets)
+
+            if other.fret <= min_fret:
+                distance = min_fret - other.fret
+            elif other.fret >= max_fret:
+                distance = other.fret - max_fret
+            else:
+                distance = other.fret - (max_fret+min_fret)/2
+        else:
+            raise ValueError('Must compare to a strum or pluck')
+
+        return abs(distance)
+
     def __str__(self):
         return '<strum: %s>' % ', '.join([p.__str__() for p in self._plucks])
+
+    def __repr__(self):
+        return self.__str__()
 
 class Pluck(GuitarEvent):
 
@@ -67,8 +98,37 @@ class Pluck(GuitarEvent):
         self.string = string
         self.fret = fret
 
+    def distance(self, other):
+        '''
+        Get the distance between this pluck with a pluck or strum
+        '''
+
+        if isinstance(other, Pluck):
+            if self.fret == 0 or other.fret == 0:
+                distance = 0
+            else:
+                distance = self.fret - other.fret
+        elif isinstance(other, Strum):
+            other_frets = [p.fret for p in other.plucks]
+            min_other_frets = min(other_frets)
+            max_other_frets = max(other_frets)
+
+            if self.fret <= min_other_frets:
+                distance = min_other_frets - self.fret
+            elif self.fret >= max_other_frets:
+                distance = self.fret - max_other_frets
+            else:
+                distance = self.fret - (min_other_frets + max_other_frets)/2
+        else:
+            raise ValueError('Must compare to a pluck or strum')
+
+        return abs(distance)
+
     def __eq__(self, other_pluck):
         return self.string == other_pluck.string and self.fret == other_pluck.fret
 
     def __str__(self):
         return '<pluck: string: %d, fret: %d>' % (self.string+1, self.fret)
+
+    def __repr__(self):
+        return self.__str__()

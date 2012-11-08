@@ -46,7 +46,7 @@ class Chromosome:
             self.genes.append(gene)
 
     def calc_fitness(self):
-        cost = biomechanical_cost(self)
+        cost = biomechanical_burlet(self)
         self.fitness = 1.0/(cost + 1.0)
 
     def __str__(self):

@@ -24,7 +24,44 @@ from __future__ import division
 
 from darwintab.guitar.guitarevent import Strum, Pluck
 
-def biomechanical_cost(chromo):
+def biomechanical_burlet(chromo):
+    '''
+    Evaluate the cost of a chromosome according to the minimum distance
+    between frets and a preference for lower fret numbers
+    '''        
+
+    distance = 0            # biomechanical distance
+    w_distance = 1          # distance weight
+    
+    for i in xrange(1,len(chromo.genes)):
+        prev_strum = chromo.genes[i-1].guitar_event
+        cur_strum = chromo.genes[i].guitar_event
+
+        # calculate distance between the two events
+        distance += prev_strum.distance(cur_strum)
+
+    fret_penalty = 0
+    w_fret_penalty = 2      # fret penalty weight
+    fret_threshold = 7      # start incurring penalties above fret 7
+
+    chord_distance = 0
+    w_chord_distance = 1
+
+    for g in chromo.genes:
+        cur_strum = g.guitar_event
+        if isinstance(cur_strum, Pluck):
+            if cur_strum.fret > fret_threshold:
+                fret_penalty += 1
+        else:
+            frets = [p.fret for p in cur_strum.plucks]
+            if max(frets) > fret_threshold:
+                fret_penalty += 1
+
+            chord_distance += max(frets) - min(frets)
+
+    return w_distance*distance + w_fret_penalty*fret_penalty + w_chord_distance*chord_distance
+
+def biomechanical_tuohy(chromo):
     '''
     Evaluate the cost of a given chromosome according
     to biomechanical constraints, which assess the physical
@@ -120,10 +157,10 @@ def biomechanical_cost(chromo):
                         # or lower note is played on a higher string
                         prev_note = chromo.genes[i-1].score_event
                         cur_note = chromo.genes[i].score_event
-                        if cur_note > prev_note and cur_strum[0].string < prev_strum[0].string:
-                            intuitive_penalty += 10
-                        elif cur_note < prev_note and cur_strum[0].string > prev_strum[0].string:
-                            intuitive_penalty += 10
+                        #if cur_note > prev_note and cur_strum[0].string < prev_strum[0].string:
+                        #    intuitive_penalty += 10
+                        #elif cur_note < prev_note and cur_strum[0].string > prev_strum[0].string:
+                        #    intuitive_penalty += 10
 
                     if len(strum_frets_depressed) > 0:
                         strum_fret_avg = sum(strum_frets_depressed)/len(strum_frets_depressed)
